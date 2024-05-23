@@ -38,6 +38,9 @@ document.getElementById('pause').addEventListener('click', () => {
                         console.error('Error sending pause command:', chrome.runtime.lastError.message);
                     } else {
                         console.log('Pause command sent:', response);
+                        // Alterne a visibilidade dos botões
+                        document.getElementById('pause').classList.add('hidden');
+                        document.getElementById('start').classList.remove('hidden');
                     }
                 });
             } else {
