@@ -18,8 +18,12 @@ if (!window.captionCaptureInitialized) {
                     observedSpans.set(index, spanText);
                 }
             });
-            currentCaption = newCaption.trim();
+            if (newCaption.trim() !== '') {
+                currentCaption = newCaption.trim();
+            }
             console.log(`Current caption: ${currentCaption}`);
+        } else {
+            console.log('Capturing is false, not capturing captions');
         }
     };
 
@@ -28,6 +32,9 @@ if (!window.captionCaptureInitialized) {
             captions.push(`${currentSpeaker}: "${currentCaption}"`);
             currentCaption = '';
             observedSpans.clear();
+            console.log('Finalized current caption, captions:', captions);
+        } else {
+            console.log('Current caption or current speaker is empty, not finalizing current caption');
         }
     };
 
@@ -83,14 +90,20 @@ if (!window.captionCaptureInitialized) {
                 finalizeCurrentCaption();
                 const captionsText = captions.join('\n');
                 console.log('Final captions:', captionsText);
-                chrome.runtime.sendMessage({ type: 'download', data: captionsText }, (response) => {
-                    if (chrome.runtime.lastError) {
-                        console.error('Error sending download command:', chrome.runtime.lastError.message);
-                    } else {
-                        console.log('Download command sent:', response);
-                    }
-                });
-                sendResponse({ status: 'stopped' });
+                if (captionsText) {
+                    chrome.runtime.sendMessage({ type: 'download', data: captionsText }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            console.error('Error sending download command:', chrome.runtime.lastError.message);
+                            sendResponse({ status: 'error', message: chrome.runtime.lastError.message });
+                        } else {
+                            console.log('Download command sent:', response);
+                            sendResponse({ status: 'success' });
+                        }
+                    });
+                } else {
+                    console.error('No captions to download.');
+                    sendResponse({ status: 'error', message: 'No captions to download.' });
+                }
                 console.log('Capturing stopped and data sent for download.');
                 captions = [];
             }

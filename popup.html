@@ -5,25 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caption Capture</title>
     <link href="https://unpkg.com/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="js/fonteawesome.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/fontawesome.min.css">
+    <style>
+        .bg-dark {
+            background-color: #1a1a2e;
+        }
+        .btn-primary {
+            background-color: #e94560;
+        }
+        .btn-primary:hover {
+            background-color: #e94560;
+            border: 2px solid #162447;
+        }
+        .btn-secondary {
+            background-color: #f0a500;
+        }
+        .btn-secondary:hover {
+            background-color: #f0a500;
+            border: 2px solid #162447;
+        }
+        .btn-success {
+            background-color: #4caf50;
+        }
+        .btn-success:hover {
+            background-color: #4caf50;
+            border: 2px solid #081649;
+        }
+    </style>
 </head>
-<body class="p-4 ">
-<div class="flex flex-col items-center">
-    <h1 class="text-xl font-bold mb-4">Caption Capture</h1>
+<body class="p-4 bg-dark text-white" style="width: 300px !important; border: 3px #ffffff solid; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
+<div class="flex flex-col items-center" style="">
+    <h1 class="text-2xl font-bold mb-4">Caption Capture</h1>
     <div class="relative group">
-        <button id="start" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-700">
-            <i class="fas fa-record-vinyl fa-2x"></i>
+        <button id="start" class="btn-primary text-white p-4 rounded-full hover:shadow-lg">
+            <img src="svgs/solid/record-vinyl.svg" alt="Record" class="w-8 h-8 text-white">
         </button>
         <span class="absolute -top-8 -left-4 bg-black text-white text-xs rounded py-1 px-4 opacity-0 group-hover:opacity-100">Start Recording</span>
     </div>
     <div class="hidden flex-col items-center mt-4" id="controls">
-        <button id="pause" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-700 mb-2">
-            <i class="fas fa-pause fa-2x"></i>
+        <button id="pause" class="btn-secondary text-white p-4 rounded-full hover:shadow-lg mb-2">
+            <img src="svgs/solid/pause.svg" alt="Pause" class="w-8 h-8">
         </button>
-        <button id="stop" class="bg-green-500 text-white p-2 rounded-full hover:bg-green-700">
-            <i class="fas fa-stop fa-2x"></i>
+        <button id="stop" class="btn-primary text-white p-4 rounded-full hover:shadow-lg">
+            <img src="svgs/solid/stop.svg" alt="Stop" class="w-8 h-8">
         </button>
     </div>
 </div>
