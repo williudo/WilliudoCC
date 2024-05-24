@@ -5,6 +5,13 @@ if (!window.captionCaptureInitialized) {
     let currentCaption = '';
     let observedSpans = new Map();
 
+    chrome.storage.local.get(['isRecording'], (result) => {
+        if (result.isRecording) {
+            capturing = true;
+            observeCaptions();
+        }
+    });
+
     const captureCaptions = (spanElements) => {
         if (capturing) {
             let newCaption = '';
@@ -79,15 +86,18 @@ if (!window.captionCaptureInitialized) {
             if (request.command === 'start') {
                 capturing = true;
                 observeCaptions();
+                chrome.storage.local.set({ isRecording: true, isPaused: false });
                 sendResponse({ status: 'started' });
                 console.log('Capturing started.');
             } else if (request.command === 'pause') {
                 capturing = false;
+                chrome.storage.local.set({ isPaused: true });
                 sendResponse({ status: 'paused' });
                 console.log('Capturing paused.');
             } else if (request.command === 'stop') {
                 capturing = false;
                 finalizeCurrentCaption();
+                chrome.storage.local.set({ isRecording: false, isPaused: false });
                 const captionsText = captions.join('\n');
                 console.log('Final captions:', captionsText);
                 if (captionsText) {

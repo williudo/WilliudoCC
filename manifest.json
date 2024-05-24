@@ -1,13 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Google Meet Caption Capture",
+  "name": "Williudo's Google Meet Subtitle Capturer",
   "version": "1.0",
   "description": "Captura as legendas do Google Meet.",
   "permissions": [
     "activeTab",
     "scripting",
     "downloads",
-    "tabs"
+    "tabs",
+    "storage",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://api.groq.com/"
   ],
   "background": {
     "service_worker": "background.js"

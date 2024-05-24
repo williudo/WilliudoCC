@@ -38,8 +38,3 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         }
     }
 });
-
-// Inicialmente desabilite a ação
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.action.disable();
-});
