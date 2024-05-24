@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'download' && request.data) {
-        console.log('Download request received with data:', request.data);
+        //console.log('Download request received with data:', request.data);
         const blob = new Blob([request.data], { type: 'text/plain' });
         const reader = new FileReader();
 
@@ -12,10 +12,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 conflictAction: 'overwrite'
             }, (downloadId) => {
                 if (chrome.runtime.lastError) {
-                    console.error('Error downloading file:', chrome.runtime.lastError.message);
+                    //console.error('Error downloading file:', chrome.runtime.lastError.message);
                     sendResponse({ status: 'error', message: chrome.runtime.lastError.message });
                 } else {
-                    console.log('File downloaded with ID:', downloadId);
+                    //console.log('File downloaded with ID:', downloadId);
                     sendResponse({ status: 'success' });
                 }
             });
@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         reader.readAsDataURL(blob);
     } else {
-        console.error('No data to download:', request);
+        //console.error('No data to download:', request);
         sendResponse({ status: 'error', message: 'No data to download' });
     }
     return true; // Indica que a resposta será enviada de forma assíncrona

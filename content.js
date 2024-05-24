@@ -9,6 +9,7 @@ if (!window.captionCaptureInitialized) {
         if (result.isRecording) {
             capturing = true;
             observeCaptions();
+            toggleCaptions('on'); // Ativa as legendas ao carregar
         }
     });
 
@@ -28,9 +29,9 @@ if (!window.captionCaptureInitialized) {
             if (newCaption.trim() !== '') {
                 currentCaption = newCaption.trim();
             }
-            console.log(`Current caption: ${currentCaption}`);
+            //console.log(`Current caption: ${currentCaption}`);
         } else {
-            console.log('Capturing is false, not capturing captions');
+            //console.log('Capturing is false, not capturing captions');
         }
     };
 
@@ -39,9 +40,9 @@ if (!window.captionCaptureInitialized) {
             captions.push(`${currentSpeaker}: "${currentCaption}"`);
             currentCaption = '';
             observedSpans.clear();
-            console.log('Finalized current caption, captions:', captions);
+            //console.log('Finalized current caption, captions:', captions);
         } else {
-            console.log('Current caption or current speaker is empty, not finalizing current caption');
+            //console.log('Current caption or current speaker is empty, not finalizing current caption');
         }
     };
 
@@ -72,12 +73,12 @@ if (!window.captionCaptureInitialized) {
                 };
                 const observer = new MutationObserver(callback);
                 observer.observe(targetNode, config);
-                console.log('Observer started.');
+                //console.log('Observer started.');
             } else {
-                console.error('Captions container not found.');
+                //console.error('Captions container not found.');
             }
         } catch (error) {
-            console.error('Error in observeCaptions:', error);
+            //console.error('Error in observeCaptions:', error);
         }
     };
 
@@ -86,43 +87,60 @@ if (!window.captionCaptureInitialized) {
             if (request.command === 'start') {
                 capturing = true;
                 observeCaptions();
+                toggleCaptions('on'); // Ativa as legendas ao iniciar
                 chrome.storage.local.set({ isRecording: true, isPaused: false });
                 sendResponse({ status: 'started' });
-                console.log('Capturing started.');
+                //console.log('Capturing started.');
             } else if (request.command === 'pause') {
                 capturing = false;
+                toggleCaptions('off'); // Desativa as legendas ao pausar
                 chrome.storage.local.set({ isPaused: true });
                 sendResponse({ status: 'paused' });
-                console.log('Capturing paused.');
+                //console.log('Capturing paused.');
             } else if (request.command === 'stop') {
                 capturing = false;
                 finalizeCurrentCaption();
+                toggleCaptions('off'); // Desativa as legendas ao pausar
                 chrome.storage.local.set({ isRecording: false, isPaused: false });
                 const captionsText = captions.join('\n');
-                console.log('Final captions:', captionsText);
-                if (captionsText) {
-                    chrome.runtime.sendMessage({ type: 'download', data: captionsText }, (response) => {
+                const finalText = `${captionsText}\n------\nIsso é uma captura de legendas do google meet, onde fazemos a nossa daily de desenvolvimento.\nSó que está muito desorganizado, crie uma ata.\n\nDos assuntos que foram falados, separados pelo que cada pessoa disse de forma resumida.\nMas não coloque piadas, palavrões ou conversas inapropriadas.\n\nSe foi falado sobre algo que será feito, coloque como ações.\né muito importante, não colocar nada que não foi dito. Somente coloque o que foi falado acima\n------\nSe não foi falado nada acima de ------, então simplemente mencione que não tem nada.`;
+
+                //console.log('Final captions:', finalText);
+                if (finalText) {
+                    chrome.runtime.sendMessage({ type: 'download', data: finalText }, (response) => {
                         if (chrome.runtime.lastError) {
-                            console.error('Error sending download command:', chrome.runtime.lastError.message);
+                            //console.error('Error sending download command:', chrome.runtime.lastError.message);
                             sendResponse({ status: 'error', message: chrome.runtime.lastError.message });
                         } else {
-                            console.log('Download command sent:', response);
+                            //console.log('Download command sent:', response);
                             sendResponse({ status: 'success' });
                         }
                     });
                 } else {
-                    console.error('No captions to download.');
+                    //console.error('No captions to download.');
                     sendResponse({ status: 'error', message: 'No captions to download.' });
                 }
-                console.log('Capturing stopped and data sent for download.');
+                //console.log('Capturing stopped and data sent for download.');
                 captions = [];
             }
         } catch (error) {
-            console.error('Error in onMessage listener:', error);
+            //console.error('Error in onMessage listener:', error);
             sendResponse({ status: 'error', message: error.message });
         }
         return true;  // Indica que a resposta será enviada de forma assíncrona
     });
 
     window.captionCaptureInitialized = true;
+}
+
+function toggleCaptions(state) {
+    const captionButton = document.querySelector('button[aria-label*="legendas"]');
+    if (captionButton) {
+        const isPressed = captionButton.getAttribute('aria-pressed') === 'true';
+        if ((state === 'on' && !isPressed) || (state === 'off' && isPressed)) {
+            captionButton.click();
+        }
+    } else {
+        //console.error('Caption button not found.');
+    }
 }
