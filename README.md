@@ -51,18 +51,5 @@ Esta extensão captura as legendas do Google Meet e salva-as em um arquivo de te
 
 ## Nota
 
-As legendas capturadas serão salvas em um arquivo de texto com a seguinte mensagem ao final:
------
-Isso é uma captura de legendas do google meet, onde fazemos a nossa daily de desenvolvimento.
-Só que está muito desorganizado, crie uma ata.
-
-Dos assuntos que foram falados, separados pelo que cada pessoa disse de forma resumida.
-Mas não coloque piadas, palavrões ou conversas inapropriadas.
-
-Se foi falado sobre algo que será feito, coloque como ações.
-é muito importante, não colocar nada que não foi dito. Somente coloque o que foi falado acima
-Se não foi falado nada acima de ------, então simplemente mencione que não tem nada.
-
-##
-
 Pronto! Agora você está preparado para capturar as legendas das suas reuniões do Google Meet de forma organizada.
+Você pode subir esse arquivo, diretamente no chatgpt, que ele irá criar a ata, sem você precisar digitar nada mais.
