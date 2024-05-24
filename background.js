@@ -6,9 +6,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         reader.onload = function() {
             const url = reader.result;
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hour = String(now.getHours()).padStart(2, '0');
+            const minute = String(now.getMinutes()).padStart(2, '0');
+            const second = String(now.getSeconds()).padStart(2, '0');
+            const filename = `legendas_google_meet_${day}_${month}_${year}__${hour}_${minute}_${second}.txt`;
+
             chrome.downloads.download({
                 url: url,
-                filename: 'captions.txt',
+                filename: filename,
                 conflictAction: 'overwrite'
             }, (downloadId) => {
                 if (chrome.runtime.lastError) {
